@@ -1,0 +1,5 @@
+{
+  "name": "UTMify Clone",
+  "description": "Conversion tracking system for paid traffic with Meta CAPI integration.",
+  "requestFramePermissions": []
+}

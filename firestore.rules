@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: sessions
+    // Document ID: sessionId
+    // Fields:
+    //   - id: string (required)
+    //   - utm_source: string
+    //   - utm_campaign: string
+    //   - utm_medium: string
+    //   - utm_content: string
+    //   - utm_term: string
+    //   - ip: string
+    //   - user_agent: string
+    //   - email: string
+    //   - created_at: string (ISO 8601)
+    //   - last_active: string (ISO 8601)
+    //
+    // Collection: events
+    // Document ID: eventId
+    // Fields:
+    //   - id: string (required)
+    //   - session_id: string (required)
+    //   - event_name: string (required)
+    //   - url: string
+    //   - timestamp: string (ISO 8601)
+    //
+    // Collection: purchases
+    // Document ID: purchaseId
+    // Fields:
+    //   - id: string (required)
+    //   - session_id: string (required)
+    //   - value: number (required)
+    //   - currency: string
+    //   - status: string
+    //   - email: string
+    //   - products: list
+    //   - created_at: string (ISO 8601)
+    //   - utm_campaign: string
+    //   - utm_source: string
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "cdsmarketingg@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    // Sessions: Server-side tracking mostly, but client might need to read its own session
+    match /sessions/{sessionId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only server (Admin SDK) should write
+    }
+
+    // Events: Only admin can read, server writes
+    match /events/{eventId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Purchases: Only admin can read, server writes
+    match /purchases/{purchaseId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Users: Admin can manage
+    match /users/{userId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Settings: Admin can manage
+    match /settings/{docId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

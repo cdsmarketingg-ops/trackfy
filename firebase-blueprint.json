@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "Session": {
+      "title": "Session",
+      "description": "User tracking session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "utm_source": { "type": "string" },
+        "utm_campaign": { "type": "string" },
+        "utm_medium": { "type": "string" },
+        "utm_content": { "type": "string" },
+        "utm_term": { "type": "string" },
+        "ip": { "type": "string" },
+        "user_agent": { "type": "string" },
+        "email": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "last_active": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "created_at"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "Tracking event",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "event_name": { "type": "string" },
+        "url": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "session_id", "event_name", "timestamp"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "Sales record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "value": { "type": "number" },
+        "currency": { "type": "string" },
+        "status": { "type": "string" },
+        "email": { "type": "string" },
+        "products": { "type": "array", "items": { "type": "string" } },
+        "created_at": { "type": "string", "format": "date-time" },
+        "utm_campaign": { "type": "string" },
+        "utm_source": { "type": "string" }
+      },
+      "required": ["id", "session_id", "value", "created_at"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Application configuration",
+      "type": "object",
+      "properties": {
+        "meta_pixel_id": { "type": "string" },
+        "meta_access_token": { "type": "string" },
+        "webhook_secret": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "User sessions"
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "Tracking events"
+    },
+    "/purchases/{purchaseId}": {
+      "schema": "Purchase",
+      "description": "Sales records"
+    },
+    "/settings/config": {
+      "schema": "Settings",
+      "description": "App settings"
+    }
+  }
+}
