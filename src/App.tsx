@@ -251,23 +251,26 @@ export default function App() {
                     <IntegrationCard 
                       icon={<Facebook className="w-6 h-6 text-blue-500" />} 
                       label="Meta Ads" 
-                      onClick={() => setActiveTab('Pixel')}
-                      description="Configure seu Pixel e CAPI para rastrear conversões."
+                      description="Conecte sua conta para importar campanhas, gastos e métricas em tempo real."
+                      status="Conectar"
                     />
                     <IntegrationCard 
                       icon={<Chrome className="w-6 h-6 text-orange-500" />} 
                       label="Google Ads" 
-                      description="Em breve: Integração direta com Google Ads API."
+                      description="Importe dados de custo e performance diretamente do Google Ads."
+                      status="Conectar"
                     />
                     <IntegrationCard 
                       icon={<Video className="w-6 h-6 text-orange-600" />} 
                       label="Kwai Ads" 
-                      description="Em breve: Rastreamento para Kwai Ads."
+                      description="Sincronize seus gastos e métricas da conta Kwai Ads."
+                      status="Em breve"
                     />
                     <IntegrationCard 
                       icon={<Music2 className="w-6 h-6 text-pink-500" />} 
                       label="TikTok Ads" 
-                      description="Em breve: Integração com TikTok Pixel."
+                      description="Conecte sua conta do TikTok para análise completa de ROI."
+                      status="Em breve"
                     />
                   </motion.div>
                 )}
@@ -594,7 +597,7 @@ function TabItem({ icon, label, active = false, onClick }: { icon: React.ReactNo
   );
 }
 
-function IntegrationCard({ icon, label, description, onClick }: { icon: React.ReactNode, label: string, description?: string, onClick?: () => void }) {
+function IntegrationCard({ icon, label, description, onClick, status }: { icon: React.ReactNode, label: string, description?: string, onClick?: () => void, status?: string }) {
   return (
     <div 
       onClick={onClick}
@@ -605,7 +608,16 @@ function IntegrationCard({ icon, label, description, onClick }: { icon: React.Re
           {icon}
         </div>
         <div>
-          <h4 className="font-bold text-gray-200">{label}</h4>
+          <div className="flex items-center gap-2">
+            <h4 className="font-bold text-gray-200">{label}</h4>
+            {status && (
+              <span className={`text-[10px] px-1.5 py-0.5 rounded uppercase font-bold ${
+                status === 'Conectar' ? 'bg-blue-500/10 text-blue-500' : 'bg-white/5 text-gray-500'
+              }`}>
+                {status}
+              </span>
+            )}
+          </div>
           {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
         </div>
       </div>
