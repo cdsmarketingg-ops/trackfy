@@ -45,15 +45,16 @@ export default function App() {
   const [savingSettings, setSavingSettings] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setLoading(false);
-      if (u) {
-        fetchStats();
-        fetchSettings();
-      }
+    // Mock user for development/preview as requested
+    setUser({
+      uid: 'mock-user-id',
+      displayName: 'Usuário Teste',
+      email: 'teste@exemplo.com',
+      photoURL: 'https://ui-avatars.com/api/?name=Usuario+Teste&background=0D8ABC&color=fff'
     });
-    return () => unsubscribe();
+    setLoading(false);
+    fetchStats();
+    fetchSettings();
   }, []);
 
   const fetchStats = async () => {
@@ -117,6 +118,8 @@ export default function App() {
     );
   }
 
+  // Login bypass enabled
+  /*
   if (!user) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
@@ -143,6 +146,7 @@ export default function App() {
       </div>
     );
   }
+  */
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex font-sans">

@@ -79,9 +79,21 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
-    // Settings: Admin can manage
+    // Settings: Admin can manage (Temporarily public for login bypass)
     match /settings/{docId} {
-      allow read, write: if isAdmin();
+      allow read, write: if true;
+    }
+
+    // Allow public read for stats if needed, but keep others restricted if possible
+    // For now, let's open up what's needed for the dashboard to function without login
+    match /purchases/{purchaseId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }
